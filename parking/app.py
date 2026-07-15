@@ -34,7 +34,11 @@ if uploaded_file is None:
 # 데이터 읽기
 # ----------------------------------------
 
-df = pd.read_csv(uploaded_file)
+try:
+    df = pd.read_csv(uploaded_file, encoding="utf-8")
+except UnicodeDecodeError:
+    uploaded_file.seek(0)
+    df = pd.read_csv(uploaded_file, encoding="cp949")
 
 # 숫자로 변환
 df["위도"] = pd.to_numeric(df["위도"], errors="coerce")
